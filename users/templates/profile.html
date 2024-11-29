@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile | Blood Group Identification</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+        h1,
+        h2 {
+            font-family: 'Lato';
+        }
+
+        body {
+            background-color: rgb(227, 255, 254);
+            font-family: 'Open sans';
+            user-select: none;
+        }
+
+        .account-btn {
+            width: 50px;
+            height: 50px;
+            font-size: 32px;
+            text-decoration: none;
+            cursor: pointer;
+            color: black;
+            background-color: white;
+            border: 3px solid rgb(33, 131, 128);
+            border-color: rgb(33, 131, 128);
+            border-radius: 100%;
+        }
+
+        .logout-btn {
+            text-decoration: none;
+            color: white;
+            background-color: rgb(33, 131, 128);
+            border: 2px solid rgb(33, 131, 128);
+            border-color: rgb(33, 131, 128);
+            padding: 10px 20px 10px 20px;
+            border-radius: 8px;
+            transition: background-color, color .2s ease-in-out;
+        }
+
+        .logout-btn:hover {
+            background-color: rgb(152, 255, 252);
+            border-color: rgb(33, 131, 128);
+            color: rgb(33, 131, 128);
+        }
+
+        .navbar {
+            background-color: rgb(115, 210, 222);
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            height: 400px;
+            width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: rgb(1, 36, 41);
+            font-size: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-size: 18px;
+            color: rgb(1, 36, 41);
+            text-align: left;
+        }
+
+        input[type="file"] {
+            margin: 10px 0;
+            padding: 10px;
+            border: 2px dashed grey;
+            border-radius: 5px;
+            color: grey;
+            width: 100%;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input[type="file"]:focus {
+            border-color: rgb(33, 131, 128);
+            outline: none;
+        }
+
+        button {
+            background-color: rgb(33, 131, 128);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 100%;
+            margin-top: 20px;
+            transition: transform 0.4s;
+        }
+
+        button:hover {
+            transform: scale(1.04);
+        }
+
+        .img-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: black;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            height: 400px;
+            overflow-y: scroll;
+            scrollbar-width: none;
+        }
+
+        .footer {
+            position: relative;
+            bottom: 0;
+            height: 86px;
+            width: 100%;
+            background: rgb(1, 36, 41);
+            color: white;
+            text-align: center;
+            align-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar sticky-top shadow-sm">
+        <div class="container-fluid p-2">
+            <a class="navbar-brand ms-5 fs-2" href="{% url 'profile' %}">Blood Group Identification</a>
+            <div class="d-flex text-center align-items-center justify-content-between">
+                <a class="logout-btn me-3" href="{% url 'signout' %}">Logout</a>
+                <a class="account-btn me-5"></a>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid row justify-content-between mt-5 mb-5 p-5">
+        <div class="col-4 form-container ms-5">
+            <h2>Upload your ABD blood cell image to detect your blood group type</h2>
+            <form class="justify-content-between" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label for="image">ABD Blood Cell Image:</label>
+                <input type="file" id="image" name="abo" required>
+                <button type="submit">Identify Blood Group</button>
+            </form>
+            {% if obj %}
+            <div class="h4 text-center mt-5" style="color: black;">Blood Group: {{ obj }}</div>
+            {% endif %}
+        </div>
+        <div class="img-container col-5 me-5">
+            {% if img and mor_img %}
+            <h3 class="mb-2">Uploaded Image</h3>
+            <img class="img-fluid" src='{{ img }}' alt="No Image">
+            <h3 class="mt-2 mb-2">Morphology Image</h3>
+            <img class="img-fluid" src='{{ mor_img }}' alt="No Image">
+            {% else %}
+            <i class="bi bi-image" style="color: grey; font-size: 200px;"></i>
+            <p class="text-center" style="color: grey;">No Image Uploaded</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="footer container-fluid">
+        <p>&copy; 2024 Blood Group Identification Project. All rights reserved.</p>
+    </div>
+    <script>
+        let name = `{{ user.username }}`;
+        name = name.charAt(0).toUpperCase();
+        document.getElementsByClassName('account-btn')[0].innerHTML = name;
+    </script>
+</body>
+
+</html>
